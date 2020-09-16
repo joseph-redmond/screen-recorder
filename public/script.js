@@ -1,22 +1,32 @@
-const startbutton = document.querySelector('#start')
-const stopbutton = document.querySelector('#stop')
+const startStopButton = document.querySelector('#start-stop')
 const downloadbutton = document.querySelector('#convert')
-const form = document.querySelector('form')
+const videoPreview = document.querySelector('#videoPreview')
 let recordedBlobs
 let mediaRecorder
 let sourceBuffer;
 let res
+
 const startScript = async () => {
-  startbutton.addEventListener('click', async () => {
-    let stream = await startCapture()
-    startRecording(stream)
-    console.log("capture started")
+  startStopButton.addEventListener('click', async () => {
+    console.log(typeof startStopButton.textContent)
+    console.log(startStopButton.textContent)
+    if (startStopButton.textContent == 'start'){
+      let stream = await startCapture()
+      startRecording(stream)
+      videoPreview.srcObject = stream
+      console.log("capture started")
+      startStopButton.textContent = 'stop'
+    }
+    else if (startStopButton.textContent == 'stop') {
+      mediaRecorder.stop()
+      console.log("recording stopped")
+      stopCapture()
+      console.log('capturing Stopped')
+      startStopButton.textContent = 'start'
+    }
   })
 
-  stopbutton.addEventListener('click', () => {
-    mediaRecorder.stop()
-    console.log("recording stopped")
-  })
+
 
   downloadbutton.addEventListener('click', () => {
     uploadVideo()
@@ -46,6 +56,13 @@ const startCapture = async () => {
     console.log(`ERROR: ${err}`)
   }
   return captureStream
+}
+
+const stopCapture = () => {
+  let tracks = videoPreview.srcObject.getTracks();
+
+  tracks.forEach(track => track.stop());
+  videoPreview.srcObject = null;
 }
 
 
@@ -131,3 +148,5 @@ function download(uuid, format, url) {
     window.URL.revokeObjectURL(url);
   }, 500);
 }
+
+

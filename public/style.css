@@ -1,5 +1,5 @@
 body{
-    background-color: gray;
+    background-color: white;
 }
 .container{
     width: 100vw;
@@ -9,8 +9,20 @@ body{
     justify-content: center;
     align-items: center;
 }
-#innerdiv{
+#controls{
     display: inline-block;
     background-color: blue;
+    
+}
+#video{
+    width: 36vw;
+    height: 36vh;
+    margin-bottom: 2vh;
+}
+
+video{
+    display: inline-block;
+    width: 35vw;
+    height: 35vh;
 }
 
