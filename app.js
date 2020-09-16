@@ -35,7 +35,7 @@ app.post('/upload-video', async (req, res) => {
                 status: true,
                 uuid: uuid,
                 format: req.body.format,
-                message: `Video is Converting to ${req.body.format}`
+                message: `Video is Converting to ${req.body.format} and will download when done`
             })
         }
     } catch (err) {

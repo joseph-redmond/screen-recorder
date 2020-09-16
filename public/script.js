@@ -1,6 +1,7 @@
 const startStopButton = document.querySelector('#start-stop')
 const downloadbutton = document.querySelector('#convert')
 const videoPreview = document.querySelector('#videoPreview')
+const container = document.querySelector('.container')
 let recordedBlobs
 let mediaRecorder
 let sourceBuffer;
@@ -112,8 +113,19 @@ function uploadVideo() {
   fetch('/upload-video', { method: "POST", body: formData }).then(
     res => res.json())
     .then(
-      res => downloadVideo(res.uuid, res.format)
-    )
+      res => {
+        showUploadResponse(res)
+        downloadVideo(res.uuid, res.format)
+
+        })
+}
+
+const showUploadResponse = (res) => {
+  let resUI = document.createElement('h3')
+  resUI.textContent = res.message
+  resUI.style.display = 'block'
+  container.appendChild(resUI)
+  
 }
 
 function downloadVideo(uuid, format) {
@@ -121,7 +133,7 @@ function downloadVideo(uuid, format) {
   downloadUrl = '/get-video'
   let checkurl = `${checkUrl}?uuid=${uuid}&format=${format}`
   let downloadurl = `${downloadUrl}?uuid=${uuid}&format=${format}`
-
+  let resUI = document.querySelector('h3')
   let interval = setInterval(() => {
     fetch(checkurl)
       .then(res => res.json())
@@ -129,6 +141,7 @@ function downloadVideo(uuid, format) {
         if (res.status) {
           clearInterval(interval)
           download(uuid, format, downloadurl)
+          resUI.style.display = 'none'
         }
       })
   }, 3000);
