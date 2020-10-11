@@ -142,12 +142,18 @@ function downloadVideo(uuid, format) {
           clearInterval(interval)
           download(uuid, format, downloadurl)
           resUI.style.display = 'none'
+	  video_downloaded(uuid, format);
         }
       })
   }, 3000);
 
 }
 
+function video_downloaded(uuid, format) {
+	const downloadedUrl = "/video-downloaded";
+	const downloadedurl = `${downloadedUrl}?uuid=${uuid}&format=${format}`;
+	fetch(downloadedurl);
+}
 
 function download(uuid, format, url) {
   let a = document.createElement('a');

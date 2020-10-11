@@ -4,10 +4,10 @@ const express = require('express')
 const fileUpload = require('express-fileupload')
 const config = require('./config')
 const convert = require('./video-convert')
-const { readFileSync } = require('fs')
+const { readFileSync, unlink } = require('fs')
 const app = express()
 const port = config.PORT || 3000
-const host = config.HOST || '127.0.0.1'
+const host = config.HOST || 'localhost'
 
 //uploadMiddleware
 app.use(fileUpload({
@@ -80,8 +80,14 @@ app.get('/get-video', (req, res) => {
     }
 })
 
-
-
+app.get('/video-downloaded', (req, res) => {
+	try {
+		unlink(`./uploads/${req.query.uuid}`, () => {})
+	}catch (err) {
+		console.log(err);
+		res.send({status:false,});
+	}
+});
 app.listen(port, host, () => {
     console.log(`App being hosted on http://${host}:${port}`)
 })
